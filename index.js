@@ -21,7 +21,25 @@ const port = 1601;
 //global middleware
 app.use(express.json());
 app.use(cors());
+//auth middleware
 
+function authMiddleware(req, res, next) {
+  try {
+    const token = req.headers.token;
+    const decodedToken = jwt.verify(token, secret);
+
+    if (decodedToken) {
+      req.userId = decodedToken.id; //passing the users id of the verified token
+      next();
+    } else {
+      res.status(403).json({
+        message: "Invalid credentials",
+      });
+    }
+  } catch (error) {
+    console.log(error + " there is some error while verifying the token");
+  }
+}
 //routes for the initial signup and sign in
 
 //sign up
@@ -57,6 +75,7 @@ app.post("/signin", async function (req, res) {
       email: email,
       password: password,
     });
+    console.log(user);
     if (!user) {
       //if the user is not present
       res.status(404).json({
@@ -64,9 +83,14 @@ app.post("/signin", async function (req, res) {
       });
     }
     //if the user is present then assign it a token
+    // console.log(user._id);// this will return the id of the user which is of object type
+    console.log({
+      id: user._id.toString(),
+    });
+
     const token = jwt.sign(
       {
-        id: user._id,
+        id: user._id.toString(), //i am giving the payload for token generation as the id of the user
       },
       secret
     );
@@ -78,6 +102,38 @@ app.post("/signin", async function (req, res) {
   } catch (error) {}
 });
 
+//authentication needed todos routes
+
+app.post("/todos", authMiddleware, function (req, res) {
+  const userId = req.userId;
+  const title = req.body.title;
+  const status = req.body.status;
+  //creating the values that can put in the todos
+  TodosModel.create({
+    title: title,
+    userId,
+    status: status,
+  }); //inserting the values inside the todos model
+  res.json({
+    userId: userId,
+  });
+});
+app.get("/todos", authMiddleware, async function (req, res) {
+  const userId = req.userId;
+  const todos = await TodosModel.find({
+    userId: userId,
+  });
+  // const user = await UserModel.findOne({
+  //   _id: userId,
+  // });//getting the users also that corresponds the todos
+  // console.log(user);
+  res.json({
+    todos,
+    // name: user.name,
+    // email: user.email,
+    // password: user.password,
+  });
+});
 //calling the app
 app.listen(port, () => {
   console.log(`the app is running on port ${port}`);
