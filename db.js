@@ -3,6 +3,7 @@ const Schema = mongoose.Schema; //require the schema of mongoose
 const ObjectId = mongoose.ObjectId; //unique id in mongo db
 
 //describing the schema means structure of the database
+//the schema should be strict and thus follows input validation
 const Users = new Schema({
   email: { type: String, unique: true },
   password: String,
