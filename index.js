@@ -28,7 +28,7 @@ app.use(cors());
 
 //sign up
 app.post("/signup", async function (req, res) {
-  //schema validation using zod
+  //schema validation using zod library
   const requiredBody = z
     .object({
       email: z.string().min(3).max(40).email(),
@@ -48,18 +48,18 @@ app.post("/signup", async function (req, res) {
       message: "invalid format of the credentials",
       error: parseData.error.errors.map(
         (err) => err.path + "field" + " -> " + err.message
-      ),
+      ), //mapping the error array and returning the path with the error
     });
   }
   console.log(parseData.data); //the correct data that passes all the validations
-
+  //input crdentials
   const email = req.body.email;
   const password = req.body.password;
   const name = req.body.name;
 
   try {
     const saltrounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltrounds);
+    const hashedPassword = await bcrypt.hash(password, saltrounds); //bcrypt is an external lib.
 
     await UserModel.create({
       email: email,
