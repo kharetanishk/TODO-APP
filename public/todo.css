@@ -1,0 +1,78 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+body {
+  background-image: url("./todo-interface.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 90%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.parent-element {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  margin-top: 30px;
+  margin-left: 30px;
+  max-width: fit-content;
+  /* max-width: fit-content; */
+  /* border: 0.1px solid black; */
+}
+.heading {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: xx-large;
+  /* border: 0.1px solid black; */
+  max-width: fit-content;
+  padding: 2px 2px;
+  /* margin: auto; */
+  margin-bottom: 30px;
+  margin-top: 20px;
+  /* background-color: rgba(166, 217, 202, 0.5); */
+  border-radius: 7px;
+  color: rgb(0, 0, 0);
+  cursor: none;
+}
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* border: 1px solid black; */
+  padding: 2px 2px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.input-field {
+  max-width: 100%;
+  width: 300px;
+  height: 40px;
+  padding-left: 6px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: large;
+  background-color: antiquewhite;
+  color: black;
+}
+.button {
+  display: flex;
+  justify-content: center;
+}
+#button {
+  max-width: fit-content;
+  font-size: large;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  padding: 2px 2px;
+  border: 1px solid black;
+  border-radius: 7px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  background-color: antiquewhite;
+}

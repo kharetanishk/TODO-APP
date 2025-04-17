@@ -69,7 +69,7 @@ app.post("/signup", async function (req, res) {
     res.json({
       message: "you are signned up",
     });
-    throw new Error("user already exist");
+    // throw new Error("user already exist");
   } catch (error) {
     console.log(error);
     res.status(500).json({

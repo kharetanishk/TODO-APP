@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-up</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="todo.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="parent-element">
+      <div class="heading">SIGN-UP YOUR ACCOUNT</div>
+      <div class="input">
+        <input
+          type="text"
+          placeholder="Enter your email"
+          autocomplete="off"
+          autofocus
+          id="signup-email"
+          class="input-field"
+        />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="off"
+          id="signup-password"
+          class="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Enter your name"
+          autocomplete="off"
+          id="name"
+          class="input-field"
+        />
+      </div>
+      <div class="button">
+        <button id="button" onclick="signningUp()">SIGNUP</button>
+      </div>
+      <div>
+        <p id="error-msg">here the errors will be pushed</p>
+      </div>
+    </div>
+  </body>
+  <script>
+    async function signningUp() {
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      const name = document.getElementById("name").value;
+      try {
+        const response = await axios.post("http://localhost:1601/signup", {
+          email,
+          password,
+          name,
+        });
+        if (!response) {
+          console.log("the response havent got ");
+        } else {
+          console.log(response.data);
+        }
+
+        alert("The user have signned up ");
+      } catch (error) {
+        console.log(
+          "error while getting the response" +
+            error +
+            "unexpected error while signning up"
+        );
+      }
+    }
+  </script>
+</html>
