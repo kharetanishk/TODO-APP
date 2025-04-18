@@ -10,6 +10,7 @@ const secret = process.env.JWT_SECRET;
 const mongoUrl = process.env.MONGO_URL; //url is inside env file
 const { UserModel, TodosModel } = require("./db"); //importing the model from another js file
 const { authMiddleware } = require("./auth"); //importing the auth
+const { parse } = require("dotenv");
 //established the connection between database and the backend server
 mongoose
   .connect(mongoUrl)
@@ -44,13 +45,14 @@ app.post("/signup", async function (req, res) {
     .strict(); //should follow this schema onlyany extra field will throw an error
   const parseData = requiredBody.safeParse(req.body); //will return a succes(boolean) and the data
   if (!parseData.success) {
-    return res.json({
-      message: "invalid format of the credentials",
+    return res.status(400).json({
       error: parseData.error.errors.map(
         (err) => err.path + "field" + " -> " + err.message
       ), //mapping the error array and returning the path with the error
+      message: "invalid credentials",
     });
   }
+
   console.log(parseData.data); //the correct data that passes all the validations
   //input crdentials
   const email = req.body.email;
@@ -66,16 +68,19 @@ app.post("/signup", async function (req, res) {
       password: hashedPassword,
       name: name,
     });
-    res.json({
+    res.status(200).json({
       message: "you are signned up",
     });
     // throw new Error("user already exist");
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "An error occured during signup",
-      error: error.errmsg,
-      solution: "add another email address",
+    return res.status(500).json({
+      error: [
+        {
+          error: "An error occured during signup, Try again",
+          message: "Try with another email address",
+        },
+      ],
     });
   }
 });

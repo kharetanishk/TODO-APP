@@ -38,7 +38,8 @@
         <button id="button" onclick="signningUp()">SIGNUP</button>
       </div>
       <div>
-        <p id="error-msg">here the errors will be pushed</p>
+        <p id="error-msg"></p>
+        <p id="success"></p>
       </div>
     </div>
   </body>
@@ -47,25 +48,56 @@
       const email = document.getElementById("signup-email").value;
       const password = document.getElementById("signup-password").value;
       const name = document.getElementById("name").value;
-      try {
-        const response = await axios.post("http://localhost:1601/signup", {
-          email,
-          password,
-          name,
-        });
-        if (!response) {
-          console.log("the response havent got ");
-        } else {
-          console.log(response.data);
-        }
+      const errorElement = document.getElementById("error-msg");
+      const successElement = document.getElementById("success");
+      if (!email || !password || !name) {
+        return (errorElement.textContent = "All field are mandatory");
+      }
+      successElement.textContent = "";
+      errorElement.textContent = "";
 
-        alert("The user have signned up ");
-      } catch (error) {
-        console.log(
-          "error while getting the response" +
-            error +
-            "unexpected error while signning up"
+      try {
+        const response = await axios.post(
+          "http://localhost:1601/signup",
+          {
+            email,
+            password,
+            name,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
+        console.log(response);
+        if (response.status === 200) {
+          successElement.textContent =
+            response.data.message || "Signup successful!";
+        }
+      } catch (error) {
+        console.log(error.response);
+        console.log(error.response.data);
+        console.log(error.response.data.error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          const backEndError = error.response.data;
+          const errorArray = backEndError.error;
+          console.log(errorArray[0]);
+          if (Array.isArray(errorArray) && errorArray.length > 0) {
+            errorElement.textContent = errorArray[0].split("->")[1].trim();
+          }
+
+          if (errorArray[0].startsWith("name")) {
+            errorElement.textContent =
+              "Namefield" + " " + errorElement.textContent;
+          }
+        } else {
+          errorElement.textContent = "Unexpected error while signning up";
+        }
       }
     }
   </script>
