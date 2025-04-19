@@ -10,7 +10,7 @@ const secret = process.env.JWT_SECRET;
 const mongoUrl = process.env.MONGO_URL; //url is inside env file
 const { UserModel, TodosModel } = require("./db"); //importing the model from another js file
 const { authMiddleware } = require("./auth"); //importing the auth
-const { parse } = require("dotenv");
+
 //established the connection between database and the backend server
 mongoose
   .connect(mongoUrl)
@@ -70,28 +70,24 @@ app.post("/signup", async function (req, res) {
       name: name,
     });
     res.status(200).json({
-      message: "you are signned up",
+      message: "You are signned up",
     });
-    // throw new Error("user already exist");
-  } catch {
-    const repeatedUser = await UserModel.findOne({
-      email,
-    });
-    if (repeatedUser) {
-      res.status(400).json({
-        message: "User already exist try Signning In",
+  } catch (err) {
+    if (await UserModel.findOne({ email })) {
+      res.status(500).json({
+        message: "User already exist",
+        err,
       });
     }
   }
 });
 
 app.post("/signin", async function (req, res) {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body;
 
   try {
     const user = await UserModel.findOne({ email });
-    // console.log(user);
+    // console.log("USER Pss" + user.password);
 
     if (!user) {
       return res.status(404).json({
@@ -99,24 +95,31 @@ app.post("/signin", async function (req, res) {
       });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password); //comparing the password
-    //with the password present in the database of users
-
-    if (!isValidPassword) {
-      return res.status(400).json({
+    // Compare password
+    const validPassword = await bcrypt.compare(password, user.password);
+    console.log(validPassword);
+    if (!validPassword) {
+      return res.status(401).json({
         message: "Invalid password",
       });
     }
 
-    const token = jwt.sign({ id: user._id.toString() }, secret);
+    // Create JWT token
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      secret,
+      { expiresIn: "1h" }
+    );
 
     res.status(200).json({
-      message: "You are logged in, token generated!",
+      message: `Welcome again ${user.name}`,
       token,
     });
   } catch (error) {
-    console.log("Unexpected error in signin route:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.log("Error in sign in:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -141,13 +144,13 @@ app.get("/todos", authMiddleware, async function (req, res) {
   const todos = await TodosModel.find({
     userId: userId,
   });
-  // const user = await UserModel.findOne({
-  //   _id: userId,
-  // });//getting the users also that corresponds the todos
-  // console.log(user);
+  const user = await UserModel.findOne({
+    _id: userId,
+  }); //getting the users also that corresponds the todos
+  console.log(user);
   res.json({
     todos,
-    // name: user.name,
+    name: user.name,
     // email: user.email,
     // password: user.password,
   });

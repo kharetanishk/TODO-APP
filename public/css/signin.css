@@ -4,24 +4,24 @@
   box-sizing: border-box;
 }
 body {
-  background-image: url("./todo-interface.png");
+  background-image: url("../images/signin.jpg");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: 95%;
-  height: 100vh;
+  background-position: 110%;
+  height: 78vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 .grandpa {
-  width: 700px;
+  width: 800px;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
   position: relative;
   height: 570px;
   display: block;
-  margin-top: 100px;
-  margin-left: 100px;
+  margin-top: 200px;
+  margin-left: 50px;
   /* border: 3px solid black; */
 }
 .parent-element {
@@ -33,12 +33,13 @@ body {
 .heading {
   margin-top: 10px;
   margin-bottom: 20px;
-  padding: 2px 2px;
+
   font-size: 60px;
   overflow: hidden;
   white-space: nowrap;
+  width: fit-content;
   border-right: 4px solid black;
-  animation: typing 2s steps(25), blink 0.5s step-end infinite alternate;
+  animation: typing 2s steps(25), blink 0.5s step-start infinite alternate;
 }
 @keyframes typing {
   from {
@@ -58,7 +59,7 @@ body {
   margin-top: 35px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   margin-bottom: 20px;
 }
 .input-field {
@@ -78,8 +79,14 @@ body {
 .input-field:focus {
   transform: scale(1.02);
 }
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+}
 .button {
   transition: transform 0.1s ease, box-shadow 0.1s ease;
+  display: inline-block;
+  margin-right: 290px;
 }
 .button:active {
   transform: scale(0.8);
@@ -113,10 +120,9 @@ body {
 .animated-bounce {
   animation: bounceIn 0.7s ease-out;
 }
-
 .messages {
-  margin-top: 15px;
-  width: 600px;
+  margin-top: 20px;
+  width: 70%;
   border-top: 0.1px solid black;
   display: flex;
   justify-content: center;

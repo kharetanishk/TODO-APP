@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-image: url("../images/monkey.png");
+  background-color: beige;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 40vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 240px;
+  width: 700px;
+  height: 200px;
+  margin: auto;
+  margin-top: 490px;
+  margin-bottom: 40px;
+}
+.landbutton {
+  text-decoration: none;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: 30px;
+  font-weight: bolder;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  background-color: black;
+  transition: ease-in-out, 1.3s;
+}
+.text {
+  color: white;
+  background-color: black;
+}
+a:hover {
+  color: rgb(168, 232, 6);
+  background-color: black;
+  font-size: 45px;
+  border: 3px solid black;
+  transition: ease-in-out, 0.5s;
+}
+a:hover::after {
+  transform: scale(1.9);
+}
+.adjust {
+  margin-top: 30px;
+  margin-right: 40px;
+}
+.rightadjust {
+  margin-top: 30px;
+  margin-left: 40px;
+}

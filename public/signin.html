@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Sign-in</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link href="todo.css" rel="stylesheet" />
+    <link href="./css/signin.css" rel="stylesheet" />
   </head>
   <body>
     <div class="grandpa">
@@ -24,12 +24,14 @@
           type="password"
           placeholder="Enter your password"
           autocomplete="off"
-          id="signinp-password"
+          id="signin-password"
           class="input-field"
         />
       </div>
-      <div class="button">
-        <button id="button" onclick="signningIn()">SIGN-IN</button>
+      <div class="button-wrapper">
+        <div class="button">
+          <button id="button" onclick="signningIn()">SIGN-IN</button>
+        </div>
       </div>
       <div class="messages">
         <p id="error-msg"></p>
@@ -41,6 +43,8 @@
     async function signningIn() {
       const email = document.getElementById("signin-email").value;
       const password = document.getElementById("signin-password").value;
+      const errorElement = document.getElementById("error-msg");
+      const successElement = document.getElementById("success");
       function triggerBounce(el) {
         el.classList.remove("animated-bounce"); // remove old animation
         void el.offsetWidth; // trick to restart it
@@ -55,22 +59,42 @@
         triggerBounce(errorElement);
         return;
       }
+
       try {
-        const response = axios.post(
+        const response = await axios.post(
           "http://localhost:1601/signin",
           {
             email,
             password,
           },
           {
-            header: {
-              "Content-Type": "application/json",
+            Headers: {
+              "Content-type": "application/json",
             },
           }
         );
-        console.log(response.data);
+        const token = response.data.token;
+        if (token && typeof token === "string") {
+          localStorage.setItem("token", token);
+          console.log("token has assigned");
+        }
+        successElement.textContent = `✅ ${response.data.message}`;
+        triggerBounce(successElement);
+
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1000);
+
+        if (!token) {
+          errorElement.textContent =
+            "⚠️" + " " + "You dont have an account , Try signning up";
+          triggerBounce(errorElement);
+        }
       } catch (error) {
-        console.log("error while signning in" + " " + error);
+        if (error.response && error.response.data) {
+          errorElement.textContent = `⚠️ ${error.response.data.message}`;
+          triggerBounce(errorElement);
+        }
       }
     }
   </script>
