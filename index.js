@@ -44,6 +44,7 @@ app.post("/signup", async function (req, res) {
     })
     .strict(); //should follow this schema onlyany extra field will throw an error
   const parseData = requiredBody.safeParse(req.body); //will return a succes(boolean) and the data
+
   if (!parseData.success) {
     return res.status(400).json({
       error: parseData.error.errors.map(
@@ -72,16 +73,15 @@ app.post("/signup", async function (req, res) {
       message: "you are signned up",
     });
     // throw new Error("user already exist");
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: [
-        {
-          error: "An error occured during signup, Try again",
-          message: "Try with another email address",
-        },
-      ],
+  } catch {
+    const repeatedUser = await UserModel.findOne({
+      email,
     });
+    if (repeatedUser) {
+      res.status(400).json({
+        message: "User already exist try Signning In",
+      });
+    }
   }
 });
 
@@ -94,7 +94,7 @@ app.post("/signin", async function (req, res) {
     // console.log(user);
 
     if (!user) {
-      return res.status(403).json({
+      return res.status(404).json({
         message: "User not found",
       });
     }
@@ -103,14 +103,14 @@ app.post("/signin", async function (req, res) {
     //with the password present in the database of users
 
     if (!isValidPassword) {
-      return res.status(403).json({
+      return res.status(400).json({
         message: "Invalid password",
       });
     }
 
     const token = jwt.sign({ id: user._id.toString() }, secret);
 
-    res.json({
+    res.status(200).json({
       message: "You are logged in, token generated!",
       token,
     });
@@ -156,3 +156,4 @@ app.get("/todos", authMiddleware, async function (req, res) {
 app.listen(port, () => {
   console.log(`the app is running on port ${port}`);
 });
+//

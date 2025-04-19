@@ -1,78 +1,135 @@
 * {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 body {
   background-image: url("./todo-interface.png");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: 90%;
+  background-position: 95%;
   height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
+.grandpa {
+  width: 700px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  position: relative;
+  height: 570px;
+  display: block;
+  margin-top: 100px;
+  margin-left: 100px;
+  /* border: 3px solid black; */
+}
 .parent-element {
   display: flex;
   flex-direction: column;
-  justify-content: left;
-  align-items: left;
-  margin-top: 30px;
-  margin-left: 30px;
-  max-width: fit-content;
-  /* max-width: fit-content; */
-  /* border: 0.1px solid black; */
+  justify-content: center;
+  align-items: center;
 }
 .heading {
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-  font-size: xx-large;
-  /* border: 0.1px solid black; */
-  max-width: fit-content;
+  margin-top: 10px;
+  margin-bottom: 20px;
   padding: 2px 2px;
-  /* margin: auto; */
-  margin-bottom: 30px;
-  margin-top: 20px;
-  /* background-color: rgba(166, 217, 202, 0.5); */
-  border-radius: 7px;
-  color: rgb(0, 0, 0);
-  cursor: none;
+  font-size: 60px;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 4px solid black;
+  animation: typing 2s steps(25), blink 0.5s step-end infinite alternate;
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
 }
 .input {
+  margin-top: 35px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  /* border: 1px solid black; */
-  padding: 2px 2px;
-  align-items: center;
-  justify-content: center;
+  gap: 20px;
   margin-bottom: 20px;
 }
 .input-field {
-  max-width: 100%;
-  width: 300px;
-  height: 40px;
-  padding-left: 6px;
+  width: 500px;
+  height: 69px;
+  font-size: xx-large;
+  background-color: beige;
+  color: black;
+  padding-left: 10px;
+  border: 3px solid black;
+  border-radius: 7px;
+  font-weight: 500;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  font-size: large;
-  background-color: antiquewhite;
-  color: black;
+  transition: transform 0.2s ease;
+}
+.input-field:focus {
+  transform: scale(1.02);
 }
 .button {
-  display: flex;
-  justify-content: center;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.button:active {
+  transform: scale(0.8);
+  box-shadow: 0 9px 6px rgba(0, 0, 0, 0.2);
 }
 #button {
-  max-width: fit-content;
-  font-size: large;
+  font-size: xx-large;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  border: 2px solid black;
+  border-radius: 20px;
+  background-color: rgb(245, 247, 248);
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  padding: 2px 2px;
-  border: 1px solid black;
-  border-radius: 7px;
-  cursor: pointer;
-  margin-bottom: 15px;
-  background-color: antiquewhite;
+}
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animated-bounce {
+  animation: bounceIn 0.7s ease-out;
+}
+
+.messages {
+  margin-top: 15px;
+  width: 600px;
+  border-top: 0.1px solid black;
+  display: flex;
+  justify-content: center;
+  padding-left: 4px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-weight: bold;
+}
+#error-msg {
+  color: red;
+  font-size: x-large;
+}
+#success {
+  color: green;
+  font-size: large;
 }

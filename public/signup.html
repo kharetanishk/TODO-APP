@@ -8,38 +8,40 @@
     <link href="todo.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="parent-element">
-      <div class="heading">SIGN-UP YOUR ACCOUNT</div>
-      <div class="input">
-        <input
-          type="text"
-          placeholder="Enter your email"
-          autocomplete="off"
-          autofocus
-          id="signup-email"
-          class="input-field"
-        />
-        <input
-          type="password"
-          placeholder="Enter your password"
-          autocomplete="off"
-          id="signup-password"
-          class="input-field"
-        />
-        <input
-          type="text"
-          placeholder="Enter your name"
-          autocomplete="off"
-          id="name"
-          class="input-field"
-        />
-      </div>
-      <div class="button">
-        <button id="button" onclick="signningUp()">SIGNUP</button>
-      </div>
-      <div>
-        <p id="error-msg"></p>
-        <p id="success"></p>
+    <div class="grandpa">
+      <div class="parent-element">
+        <div class="heading">SIGN-UP YOUR ACCOUNT</div>
+        <div class="input">
+          <input
+            type="text"
+            placeholder="Enter your email"
+            autocomplete="off"
+            autofocus
+            id="signup-email"
+            class="input-field"
+          />
+          <input
+            type="password"
+            placeholder="Enter your password"
+            autocomplete="off"
+            id="signup-password"
+            class="input-field"
+          />
+          <input
+            type="text"
+            placeholder="Enter your name"
+            autocomplete="off"
+            id="name"
+            class="input-field"
+          />
+        </div>
+        <div class="button">
+          <button id="button" onclick="signningUp()">SIGN-UP</button>
+        </div>
+        <div class="messages">
+          <p id="error-msg"></p>
+          <p id="success"></p>
+        </div>
       </div>
     </div>
   </body>
@@ -50,11 +52,21 @@
       const name = document.getElementById("name").value;
       const errorElement = document.getElementById("error-msg");
       const successElement = document.getElementById("success");
-      if (!email || !password || !name) {
-        return (errorElement.textContent = "All field are mandatory");
+      function triggerBounce(el) {
+        el.classList.remove("animated-bounce"); // remove old animation
+        void el.offsetWidth; // trick to restart it
+        el.classList.add("animated-bounce"); // re-add animation
       }
-      successElement.textContent = "";
-      errorElement.textContent = "";
+      setTimeout(() => {
+        successElement.textContent = "";
+        errorElement.textContent = "";
+      }, 3000);
+
+      if (!email || !password || !name) {
+        errorElement.textContent = "⚠️" + " " + "All fields are mandatory";
+        triggerBounce(errorElement);
+        return;
+      }
 
       try {
         const response = await axios.post(
@@ -70,10 +82,15 @@
             },
           }
         );
-        console.log(response);
+        console.log(response.data);
         if (response.status === 200) {
           successElement.textContent =
-            response.data.message || "Signup successful!";
+            "✅" + " " + response.data.message ||
+            "✅" + " " + "Signup successful!";
+          triggerBounce(successElement);
+          setTimeout(() => {
+            window.location.href = "signin.html";
+          }, 1500);
         }
       } catch (error) {
         console.log(error.response);
@@ -88,15 +105,19 @@
           const errorArray = backEndError.error;
           console.log(errorArray[0]);
           if (Array.isArray(errorArray) && errorArray.length > 0) {
-            errorElement.textContent = errorArray[0].split("->")[1].trim();
+            errorElement.textContent =
+              "⚠️" + " " + errorArray[0].split("->")[1].trim();
+            triggerBounce(errorElement);
           }
 
           if (errorArray[0].startsWith("name")) {
             errorElement.textContent =
-              "Namefield" + " " + errorElement.textContent;
+              "⚠️" + " " + "Namefield" + " " + errorElement.textContent;
+            triggerBounce(errorElement);
           }
         } else {
-          errorElement.textContent = "Unexpected error while signning up";
+          errorElement.textContent = `${error.response.data.message}`;
+          triggerBounce(errorElement);
         }
       }
     }
