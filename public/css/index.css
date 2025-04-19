@@ -5,7 +5,7 @@
 }
 body {
   background-image: url("../images/monkey.png");
-  background-color: beige;
+  background-color: rgba(255, 232, 189, 255);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50%;
@@ -27,7 +27,6 @@ body {
   margin-bottom: 40px;
 }
 .landbutton {
-  text-decoration: none;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
   font-size: 30px;
@@ -36,21 +35,14 @@ body {
   border-radius: 10px;
   color: white;
   background-color: black;
-  transition: ease-in-out, 1.3s;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
 }
-.text {
-  color: white;
-  background-color: black;
-}
-a:hover {
-  color: rgb(168, 232, 6);
-  background-color: black;
-  font-size: 45px;
-  border: 3px solid black;
-  transition: ease-in-out, 0.5s;
-}
-a:hover::after {
-  transform: scale(1.9);
+.landbutton:hover {
+  background-color: #2ef107 !important;
+  color: black;
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 .adjust {
   margin-top: 30px;
@@ -59,4 +51,47 @@ a:hover::after {
 .rightadjust {
   margin-top: 30px;
   margin-left: 40px;
+}
+/*mobile phones*/
+@media screen and (max-width: 455px) {
+  body {
+    background-image: url("../images/monkey.png");
+    background-color: rgba(255, 232, 189, 255);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100vw;
+    min-height: fit-content;
+    object-fit: contain;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+  .container {
+    display: flex;
+    margin: 0;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 350px;
+    gap: 10px;
+  }
+  .landbutton {
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    background-color: rgb(41, 24, 24);
+    margin-top: 10px;
+    display: inline-block;
+  }
 }
