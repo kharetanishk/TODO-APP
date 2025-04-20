@@ -12,24 +12,32 @@
   </head>
   <body>
     <div class="container">
-      <div class="adjust">
-        <button
-          onclick="window.location.href='signup.html'"
-          class="landbutton"
-          id="signupref"
-        >
-          SIGN-UP
+      <img id="landing-image" src="./images/monkey.png" alt="landingpage" />
+      <div class="signup">
+        <button onclick="window.location.href='signup.html'" class="button">
+          SIGN UP
         </button>
+        <p class="text">NEW ACCOUNT</p>
       </div>
-      <div class="rightadjust">
-        <button
-          onclick="window.location.href='signin.html'"
-          class="landbutton"
-          id="signinref"
-        >
-          SIGN-IN
+      <div class="signin">
+        <button onclick="window.location.href='signin.html'" class="button">
+          SIGN IN
         </button>
+        <p class="text">SIGNED UP?</p>
       </div>
     </div>
   </body>
+  <script>
+    let container = document.querySelector(".container");
+    let containerheight = container.clientHeight;
+    let containerwidth = container.clientWidth;
+    console.log(
+      `container width = ${containerwidth} and container height  =  ${containerheight}`
+    );
+    let image = document.getElementById("landingimage");
+    let height = image.clientHeight;
+    let widht = image.clientWidth;
+    console.log("height" + "=" + " " + height);
+    console.log(`widht = ${widht}`);
+  </script>
 </html>

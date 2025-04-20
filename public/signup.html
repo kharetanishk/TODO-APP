@@ -8,40 +8,41 @@
     <link href="./css/todo.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="grandpa">
-      <div class="parent-element">
-        <div class="heading">SIGN-UP YOUR ACCOUNT</div>
-        <div class="input">
-          <input
-            type="text"
-            placeholder="Enter your email"
-            autocomplete="off"
-            autofocus
-            id="signup-email"
-            class="input-field"
-          />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            autocomplete="off"
-            id="signup-password"
-            class="input-field"
-          />
-          <input
-            type="text"
-            placeholder="Enter your name"
-            autocomplete="off"
-            id="name"
-            class="input-field"
-          />
-        </div>
-        <div class="button">
-          <button id="button" onclick="signningUp()">SIGN-UP</button>
-        </div>
-        <div class="messages">
-          <p id="error-msg"></p>
-          <p id="success"></p>
-        </div>
+    <div class="image-container">
+      <img id="image" src="./images/todo-interface.png" alt="image" />
+    </div>
+    <div class="container">
+      <div class="heading">SIGN-UP YOUR ACCOUNT</div>
+      <div class="input">
+        <input
+          type="text"
+          placeholder="Enter your email"
+          autocomplete="off"
+          autofocus
+          id="signup-email"
+          class="input-field"
+        />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="off"
+          id="signup-password"
+          class="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Enter your name"
+          autocomplete="off"
+          id="name"
+          class="input-field"
+        />
+      </div>
+      <div class="button">
+        <button id="button" onclick="signningUp()">SIGN-UP</button>
+      </div>
+      <div class="messages">
+        <p id="error-msg"></p>
+        <p id="success"></p>
       </div>
     </div>
   </body>

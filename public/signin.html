@@ -7,38 +7,37 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="./css/signin.css" rel="stylesheet" />
   </head>
-  <body>
-    <div class="grandpa">
-      <div class="parent-element"></div>
-      <div class="heading">SIGN-IN YOUR ACCOUNT</div>
-      <div class="input">
-        <input
-          type="text"
-          placeholder="Enter your email"
-          autocomplete="off"
-          autofocus
-          id="signin-email"
-          class="input-field"
-        />
-        <input
-          type="password"
-          placeholder="Enter your password"
-          autocomplete="off"
-          id="signin-password"
-          class="input-field"
-        />
-      </div>
-      <div class="button-wrapper">
-        <div class="button">
-          <button id="button" onclick="signningIn()">SIGN-IN</button>
-        </div>
-      </div>
-      <div class="messages">
-        <p id="error-msg"></p>
-        <p id="success"></p>
-      </div>
+  <div class="image-container">
+    <img id="image" src="./images/signin.jpg" alt="image" />
+  </div>
+  <div class="container">
+    <div class="heading">SIGN-UP YOUR ACCOUNT</div>
+    <div class="input">
+      <input
+        type="text"
+        placeholder="Enter your email"
+        autocomplete="off"
+        autofocus
+        id="signin-email"
+        class="input-field"
+      />
+      <input
+        type="password"
+        placeholder="Enter your password"
+        autocomplete="off"
+        id="signin-password"
+        class="input-field"
+      />
     </div>
-  </body>
+    <div class="button">
+      <button id="button" onclick="signningIn()">SIGN-IN</button>
+    </div>
+    <div class="messages">
+      <p id="error-msg"></p>
+      <p id="success"></p>
+    </div>
+  </div>
+</body>
   <script>
     async function signningIn() {
       const email = document.getElementById("signin-email").value;
