@@ -52,6 +52,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
+  background-color: rgba(255, 241, 220, 255);
 }
 #image {
   width: 100%;

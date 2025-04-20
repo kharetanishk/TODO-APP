@@ -24,7 +24,7 @@ const app = express();
 const port = 1601;
 //global middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 //routes for the initial signup and sign in
 
 //sign up
@@ -114,7 +114,7 @@ app.post("/signin", async function (req, res) {
     );
 
     res.status(200).json({
-      message: `Welcome again ${user.name}`,
+      message: `Welcome ${user.name}`,
       token,
     });
   } catch (error) {
@@ -156,7 +156,7 @@ app.get("/todos", authMiddleware, async function (req, res) {
   });
 });
 //calling the app
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`the app is running on port ${port}`);
 });
 //
