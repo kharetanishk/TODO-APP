@@ -1,10 +1,9 @@
-const mongoose = require("mongoose"); //path to use mongoose
-const Schema = mongoose.Schema; //require the schema of mongoose
-const ObjectId = mongoose.ObjectId; //unique id in mongo db
+//THIS IS THE DATABASE OF OUR TODO APPLICATION
 
-//describing the schema means structure of the database
-//the schema should be strict and thus follows input validation
-const Users = new Schema({
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const User = new Schema({
   email: { type: String, unique: true },
   password: String,
   name: String,
@@ -12,16 +11,32 @@ const Users = new Schema({
 
 const Todos = new Schema({
   title: String,
-  userId: ObjectId, //this is used to refer the users collection
+  timestamp: String,
   status: Boolean,
+  User: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
-//model is where i am storing the database
-const UserModel = mongoose.model("users", Users); //adding the data in the collection users
-const TodosModel = mongoose.model("todos", Todos); //adding the data in the collection todos
+const Goals = new Schema({
+  setGoal: String,
+  tillTime: String,
+  User: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+});
 
-//export it so that it can be used in others js file
+const UserModel = mongoose.model("users", User);
+const TodoModel = mongoose.model("todos", Todos);
+const GoalModel = mongoose.model("goals", Goals);
+
+//WE WILL USE THIS MODELS TO FOR DATA MANIPULATIONS IN ROUTERS
 module.exports = {
-  UserModel: UserModel,
-  TodosModel: TodosModel,
+  UserModel,
+  TodoModel,
+  GoalModel,
 };
