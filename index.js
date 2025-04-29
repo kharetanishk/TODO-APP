@@ -5,6 +5,8 @@ const PORT = 9000;
 require("dotenv").config();
 const mongoUrl = process.env.MONGO_URL;
 const { userRouter } = require("./Router/user");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 app.use(express.json());
 

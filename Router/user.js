@@ -3,10 +3,17 @@ const userRouter = Router();
 const { UserModel } = require("../db");
 const { z } = require("zod");
 const { bcrypt } = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { SignUpMiddleware } = require("../Middleware/Signupauth");
 const { SignInMiddleware } = require("../Middleware/SigninAuth");
+const { authMiddleware } = require("../Middleware/auth");
+require("dotenv").config;
+const secret = process.env.JWT_SECRET;
+const cookieParser = require("cookie-parser");
 
 //HANDLING SIGN UP AND SIGN IN
+userRouter.use;
+cookieParser();
 
 //SIGN UP
 userRouter.post(
@@ -81,8 +88,33 @@ userRouter.post(
 userRouter.post(
   "/signin",
   SignInMiddleware(UserModel),
+  authMiddleware(secret),
   async function (req, res) {
     const { email, password } = req.body;
+    req.user = user;
+    console.log(req.user);
+    const userId = user._id;
+
+    //STEP-1 ASSIGNING THE TOKEN
+    const token = jwt.sign(
+      {
+        _id: userId,
+      },
+      secret,
+      { expiresIn: "1h" }
+    );
+
+    //setting cookies
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 3600000, //1 hour
+    });
+
+    res.status(200).json({
+      message: "User logged in",
+    });
   }
 );
 
