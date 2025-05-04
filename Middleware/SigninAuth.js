@@ -10,13 +10,13 @@ function SignInMiddleware(model) {
       console.log(user);
       if (!user) {
         return res.status(403).json({
-          error: "ACCOUNT DOES'NT EXIST ,TRY SIGNNING UP",
+          message: "ACCOUNT DOESN'T EXIST, TRY SIGNING UP",
         });
       }
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword) {
         return res.status(400).json({
-          error: "INVALID PASSWORD",
+          message: "INVALID PASSWORD",
         });
       }
       req.user = user;
@@ -24,7 +24,7 @@ function SignInMiddleware(model) {
     } catch (err) {
       console.log(err);
       res.status(500).json({
-        error: "SERVER ERROR, TRY AGAIN LATER",
+        message: "SERVER ERROR, TRY AGAIN LATER",
       });
     }
   };

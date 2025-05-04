@@ -38,7 +38,7 @@
         />
       </div>
       <div class="button">
-        <button id="button" onclick="signningUp()">SIGN-UP</button>
+        <button id="button" onclick="userSignUp()">SIGN-UP</button>
       </div>
       <div class="messages">
         <p id="error-msg"></p>
@@ -47,82 +47,63 @@
     </div>
   </body>
   <script>
-    async function signningUp() {
+    async function userSignUp() {
       const email = document.getElementById("signup-email").value;
       const password = document.getElementById("signup-password").value;
       const name = document.getElementById("name").value;
       const errorElement = document.getElementById("error-msg");
       const successElement = document.getElementById("success");
-      function triggerBounce(el) {
-        el.classList.remove("animated-bounce"); // remove old animation
-        void el.offsetWidth; // trick to restart it
-        el.classList.add("animated-bounce"); // re-add animation
-      }
-      setTimeout(() => {
-        successElement.textContent = "";
-        errorElement.textContent = "";
-      }, 3000);
 
+      function triggerBounce(el) {
+        el.classList.remove("animated-bounce");
+        void el.offsetWidth;
+        el.classList.add("animated-bounce");
+      }
+
+      // Reset messages
+      errorElement.textContent = "";
+      successElement.textContent = "";
+
+      // Validation before sending
       if (!email || !password || !name) {
-        errorElement.textContent = "⚠️" + " " + "All fields are mandatory";
+        errorElement.textContent = "⚠️ All fields are mandatory";
         triggerBounce(errorElement);
         return;
       }
 
       try {
-        const response = await axios.post(
-          "http://localhost:1601/signup",
-          {
-            email,
-            password,
-            name,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log(response.data);
+        const response = await axios.post("http://localhost:2000/user/signup", {
+          email,
+          password,
+          name,
+        });
+
         if (response.status === 200) {
-          successElement.textContent =
-            "✅" + " " + response.data.message ||
-            "✅" + " " + "Signup successful!";
+          successElement.textContent = "✅ " + response.data.message;
           triggerBounce(successElement);
           setTimeout(() => {
             window.location.href = "signin.html";
           }, 1000);
         }
       } catch (error) {
-        console.log(error.response);
-        console.log(error.response.data);
-        console.log(error.response.data.error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          const backEndError = error.response.data;
-          const errorArray = backEndError.error;
-          console.log(errorArray[0]);
-          if (Array.isArray(errorArray) && errorArray.length > 0) {
-            errorElement.textContent =
-              "⚠️" + " " + errorArray[0].split("->")[1].trim();
-            triggerBounce(errorElement);
+        if (Array.isArray(error.response.data.error)) {
+          const fieldErrors = error.response.data.error;
+
+          const emailError = fieldErrors.find((e) => e.field === "email");
+          const passwordError = fieldErrors.find((e) => e.field === "password");
+          const nameError = fieldErrors.find((e) => e.field === "name");
+
+          if (emailError) {
+            errorElement.textContent = "⚠️ " + emailError.message;
+          } else if (passwordError) {
+            errorElement.textContent = "⚠️ " + passwordError.message;
+          } else if (nameError) {
+            errorElement.textContent = "⚠️ " + nameError.message;
+          } else {
+            errorElement.textContent = "⚠️ Please correct the form fields.";
           }
 
-          if (errorArray[0].startsWith("name")) {
-            errorElement.textContent =
-              "⚠️" + " " + "Namefield" + " " + errorElement.textContent;
-            triggerBounce(errorElement);
-          }
-        } else {
-          errorElement.textContent = `⚠️! ${error.response.data.message}`;
           triggerBounce(errorElement);
-          setTimeout(() => {
-            window.location.href = "signin.html";
-          }, 1000);
-          return;
         }
       }
     }

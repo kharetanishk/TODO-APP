@@ -25,8 +25,8 @@
   position: absolute;
   justify-content: center;
   align-items: center;
-  right: 900px;
-  top: 550px;
+  right: 58%;
+  top: 75%;
   z-index: 2;
   margin: 0;
   padding: 0;
@@ -64,12 +64,15 @@
 .signin {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  position: absolute;
   justify-content: center;
   align-items: center;
-  z-index: 3;
-  position: absolute;
-  top: 550px;
-  right: 500px;
+  left: 58%;
+  top: 75%;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
 }
 @media screen and (max-width: 640px) {
   * {

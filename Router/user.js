@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const { SignUpMiddleware } = require("../Middleware/Signupauth");
 const { SignInMiddleware } = require("../Middleware/SigninAuth");
 const { authMiddleware } = require("../Middleware/auth");
-require("dotenv").config;
+require("dotenv").config();
 const secret = process.env.JWT_SECRET;
 const cookieParser = require("cookie-parser");
 
@@ -47,6 +47,9 @@ userRouter.post(
         .string({
           required_error: "Name must be provided",
         })
+        .min(2, {
+          invalid_type_error: "Name is too short",
+        })
         .max(20, {
           invalid_type_error: "Name can contain 20 letters",
         })
@@ -57,10 +60,12 @@ userRouter.post(
 
     if (!parseData.success) {
       return res.status(400).json({
-        error: parseData.error.errors.map(
-          (err) => err.path + "field" + " -> " + err.message
-        ),
-        message: "Invalid credentials",
+        error: parseData.error.errors.map((err) => {
+          return {
+            field: err.path[0],
+            message: err.message,
+          };
+        }),
       });
     }
 

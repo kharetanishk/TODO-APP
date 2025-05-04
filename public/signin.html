@@ -7,94 +7,101 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="./css/signin.css" rel="stylesheet" />
   </head>
-  <div class="image-container">
-    <img id="image" src="./images/signin.jpg" alt="image" />
-  </div>
-  <div class="container">
-    <div class="heading">SIGN-IN YOUR ACCOUNT</div>
-    <div class="input">
-      <input
-        type="text"
-        placeholder="Enter your email"
-        autocomplete="off"
-        autofocus
-        id="signin-email"
-        class="input-field"
-      />
-      <input
-        type="password"
-        placeholder="Enter your password"
-        autocomplete="off"
-        id="signin-password"
-        class="input-field"
-      />
+  <body>
+    <div class="image-container">
+      <img id="image" src="./images/signin.jpg" alt="image" />
     </div>
-    <div class="button">
-      <button id="button" onclick="signningIn()">SIGN-IN</button>
+    <div class="container">
+      <div class="heading">SIGN-IN YOUR ACCOUNT</div>
+      <div class="input">
+        <input
+          type="text"
+          placeholder="Enter your email"
+          autocomplete="off"
+          autofocus
+          id="signin-email"
+          class="input-field"
+        />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="off"
+          id="signin-password"
+          class="input-field"
+        />
+      </div>
+      <div class="button">
+        <button id="button" onclick="signningIn()">SIGN-IN</button>
+      </div>
+      <div class="messages">
+        <p id="error-msg"></p>
+        <p id="success"></p>
+      </div>
     </div>
-    <div class="messages">
-      <p id="error-msg"></p>
-      <p id="success"></p>
-    </div>
-  </div>
-</body>
-  <script>
-    async function signningIn() {
-      const email = document.getElementById("signin-email").value;
-      const password = document.getElementById("signin-password").value;
-      const errorElement = document.getElementById("error-msg");
-      const successElement = document.getElementById("success");
-      function triggerBounce(el) {
-        el.classList.remove("animated-bounce"); // remove old animation
-        void el.offsetWidth; // trick to restart it
-        el.classList.add("animated-bounce"); // re-add animation
-      }
-      setTimeout(() => {
-        successElement.textContent = "";
-        errorElement.textContent = "";
-      }, 3000);
-      if (!email || !password) {
-        errorElement.textContent = "⚠️" + " " + "All fields are mandatory";
-        triggerBounce(errorElement);
-        return;
-      }
 
-      try {
-        const response = await axios.post(
-          "http://localhost:1601/signin",
-          {
-            email,
-            password,
-          },
-          {
-            Headers: {
-              "Content-type": "application/json",
-            },
-          }
-        );
-        const token = response.data.token;
-        if (token && typeof token === "string") {
-          localStorage.setItem("token", token);
-          console.log("token has assigned");
+    <script>
+      async function signningIn() {
+        const email = document.getElementById("signin-email").value;
+        const password = document.getElementById("signin-password").value;
+        const errorElement = document.getElementById("error-msg");
+        const successElement = document.getElementById("success");
+
+        function triggerBounce(el) {
+          el.classList.remove("animated-bounce");
+          void el.offsetWidth;
+          el.classList.add("animated-bounce");
         }
-        successElement.textContent = `✅ ${response.data.message}`;
-        triggerBounce(successElement);
+
+        errorElement.textContent = "";
+        successElement.textContent = "";
+
+        if (!email || !password) {
+          errorElement.textContent = "⚠️ All fields are mandatory";
+          triggerBounce(errorElement);
+          return;
+        }
+
+        try {
+          const response = await axios.post(
+            "http://localhost:2000/user/signin",
+            { email, password },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const token = response.data.token;
+
+          if (token && typeof token === "string") {
+            localStorage.setItem("token", token);
+            successElement.textContent = `✅ ${response.data.message}`;
+            triggerBounce(successElement);
+
+            setTimeout(() => {
+              window.location.href = "home.html";
+            }, 1000);
+          } else {
+            errorElement.textContent =
+              "⚠️ You don't have an account, try signing up";
+            triggerBounce(errorElement);
+          }
+        } catch (error) {
+          if (error.response && error.response.data) {
+            errorElement.textContent = `⚠️ ${error.response.data.message}`;
+            triggerBounce(errorElement);
+          } else {
+            errorElement.textContent = "⚠️ Something went wrong";
+            triggerBounce(errorElement);
+          }
+        }
 
         setTimeout(() => {
-          window.location.href = "home.html";
-        }, 1000);
-
-        if (!token) {
-          errorElement.textContent =
-            "⚠️" + " " + "You dont have an account , Try signning up";
-          triggerBounce(errorElement);
-        }
-      } catch (error) {
-        if (error.response && error.response.data) {
-          errorElement.textContent = `⚠️ ${error.response.data.message}`;
-          triggerBounce(errorElement);
-        }
+          successElement.textContent = "";
+          errorElement.textContent = "";
+        }, 3000);
       }
-    }
-  </script>
+    </script>
+  </body>
 </html>
