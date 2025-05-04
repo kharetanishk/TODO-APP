@@ -1,3 +1,6 @@
+require("dotenv").config;
+const secret = process.env.JWT_SECRET;
+
 function SignUpMiddleware(models) {
   return async (req, res, next) => {
     const { email } = req.body;
@@ -10,11 +13,6 @@ function SignUpMiddleware(models) {
         return res.status(400).json({
           error: "Account already exist,Try Signning In",
         });
-      }
-
-      if (existingUser === null) {
-        //i have stored this newUser so it can once signup and signin simultaneously
-        req.newUser = newUser;
       }
       next();
     } catch (error) {

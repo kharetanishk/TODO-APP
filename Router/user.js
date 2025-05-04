@@ -2,7 +2,7 @@ const { Router } = require("express");
 const userRouter = Router();
 const { UserModel } = require("../db");
 const { z } = require("zod");
-const { bcrypt } = require("bcrypt");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { SignUpMiddleware } = require("../Middleware/Signupauth");
 const { SignInMiddleware } = require("../Middleware/SigninAuth");
@@ -11,9 +11,7 @@ require("dotenv").config;
 const secret = process.env.JWT_SECRET;
 const cookieParser = require("cookie-parser");
 
-//HANDLING SIGN UP AND SIGN IN
-userRouter.use;
-cookieParser();
+userRouter.use(cookieParser());
 
 //SIGN UP
 userRouter.post(
@@ -76,8 +74,12 @@ userRouter.post(
         password: hashedPassword,
         name: name,
       });
+      res.status(200).json({
+        message: "SIGNUP SUCCESSFULLY",
+      });
     } catch (error) {
-      res.status(400).json({
+      console.log(error);
+      res.status(403).json({
         error: "SERVER ERROR WHILE SIGNNING UP",
         error,
       });
@@ -88,11 +90,10 @@ userRouter.post(
 userRouter.post(
   "/signin",
   SignInMiddleware(UserModel),
-  authMiddleware(secret),
   async function (req, res) {
     const { email, password } = req.body;
-    req.user = user;
-    console.log(req.user);
+    const user = req.user;
+    console.log(user);
     const userId = user._id;
 
     //STEP-1 ASSIGNING THE TOKEN
@@ -114,6 +115,7 @@ userRouter.post(
 
     res.status(200).json({
       message: "User logged in",
+      token,
     });
   }
 );
