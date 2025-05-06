@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const userRouter = Router();
-const { UserModel } = require("../db");
+const { UserModel, TodoModel } = require("../db");
 const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -124,6 +124,63 @@ userRouter.post(
     });
   }
 );
+
+//routes to post todos
+
+userRouter.post("/addtodo", authMiddleware(secret), async function (req, res) {
+  //we need to have the user
+  const user = req.user;
+  // console.log(user, +" " + `this is from the addtodo route`);
+
+  if (!user) {
+    return res.status(403).json({
+      message: "Invalid user please log in again",
+    });
+  }
+  //now the user has checked , its time for the crud operations
+
+  const requiredBody = z.object({
+    title: z
+      .string({
+        invalid_type_error: "Todo cannot be empty",
+      })
+      .toUpperCase()
+      .trim(),
+  });
+  const parseData = requiredBody.safeParse(req.body);
+  // console.log(parseData.data.todoString.length);
+
+  if (parseData.data.title.length === 0) {
+    return res.status(400).json({
+      message: "Todos cannot be empty",
+    });
+  }
+
+  if (!parseData.success) {
+    return res.status(403).json({
+      message: parseData.error.errors.map((err) => err.message),
+    });
+  }
+
+  const { title } = req.body;
+
+  try {
+    await TodoModel.create({
+      title: title,
+    });
+
+    res.status(200).json({
+      message: "Todo added ",
+      title: title,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "Server is not responding",
+      error: error,
+    });
+  }
+});
 
 module.exports = {
   userRouter: userRouter,

@@ -10,9 +10,22 @@ const User = new Schema({
 });
 
 const Todos = new Schema({
-  title: String,
-  timestamp: String,
-  status: Boolean,
+  title: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: Boolean,
+    default: false,
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date().toLocaleString(),
+  },
+  updatedAt: {
+    type: Date,
+    default: () => new Date().toLocaleString(),
+  },
   User: [
     {
       type: mongoose.Schema.Types.ObjectId,

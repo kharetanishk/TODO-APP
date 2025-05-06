@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 function authMiddleware(secret) {
   return (req, res, next) => {
     const token = req.cookies.token;
+    // console.log(token);
 
     if (!token) {
       return res.status(403).json({
@@ -12,6 +13,7 @@ function authMiddleware(secret) {
 
     try {
       const isValidUser = jwt.verify(token, secret);
+
       console.log("Verified user:", isValidUser);
       req.user = isValidUser;
       next();
